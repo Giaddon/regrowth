@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.root {
+  margin-top: 70px;
+}
+.palette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  z-index: 10;
+  background-color: coral;
+  padding: 10px;
+}
+
+.palette div {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 5px;
+}
+.palette div:hover {
+  outline: 2px dashed gold;
+  outline-offset: 2px;
+}
+.palette-active {
+  outline: 2px solid gold;
+  outline-offset: 2px;
+}
+.make-water {
+  background-color: lightskyblue;
+}
+.make-grass {
+  background-color: green;
+}
+.make-fire {
+  background-color: orange;
+}
+.show-details {
+  background-color: #fff;
+}
+
+.row {
+  height: 35px;
+}
+
+.tile {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  /* outline: 1px solid #fff; */
+}
+
+.tile[data-type='wasteland'] {
+  background-color: black;
+}
+
+.tile[data-type='fertile'] {
+  background-color:brown;
+}
+
+.tile[data-type='grassland'] {
+  background-color: green;
+}
+.tile[data-type='water'] {
+  background-color: lightskyblue;
+}
+.tile[data-fire='1'] {
+  outline: 2px solid orange;
+}
+.tile[data-fire='2'] {
+  outline: 2px solid tomato;
+}
+.tile[data-fire='3'] {
+  outline: 2px solid tomato;
+}
+.tile[data-fire='4'] {
+  outline: 2px solid tomato;
+}
+.tile[data-fire='5'] {
+  outline: 2px solid tomato;
+}
+
+.tile[data-type='ash'] {
+  background-color: grey;
+}
+
+.tile[data-type='changed'] {
+  background-color: purple;
+}
+
+
+.tile:hover {
+  position: relative;
+  outline: 2px dashed gold;
+}
