@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 .root {
-  margin-top: 70px;
+  margin-top: 65px;
+  margin-left: 5px;
 }
 .palette {
   position: fixed;
@@ -43,29 +44,49 @@
 .make-fire {
   background-color: orange;
 }
+.add-cleanbot {
+  background-color: indigo;
+}
+.raise {
+  background-color: violet;
+}
+.lower {
+  background-color: wheat;
+}
 .show-details {
   background-color: #fff;
 }
 
 .row {
-  height: 35px;
+  height: 20px;
 }
 
 .tile {
   display: inline-block;
-  width: 35px;
-  height: 35px;
+  width: 20px;
+  height: 20px;
   /* outline: 1px solid #fff; */
 }
 
+
+.tile[data-height='0'] {
+  opacity: 0.4;
+}
+.tile[data-height='1'] {
+  opacity: 0.6;
+}
+.tile[data-height='2'] {
+  opacity: 0.8;
+}
+.tile[data-height='3'] {
+  opacity: 1.0;
+}
 .tile[data-type='wasteland'] {
   background-color: black;
 }
-
 .tile[data-type='fertile'] {
   background-color:brown;
 }
-
 .tile[data-type='grassland'] {
   background-color: green;
 }
