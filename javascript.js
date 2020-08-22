@@ -1,191 +1,10 @@
-const ROOT = $("#root");
+const TILES = $("#tiles");
+const BOTS = $("#bots");
 const PALETTE = $("#palette");
 
-class Tile {
-  constructor(x, y){
-    this.x = x;
-    this.y = y;
-    this.above = null;
-    this.right = null;
-    this.below = null;
-    this.left = null;
-    this.aboveRight = null;
-    this.aboveLeft = null;
-    this.belowRight = null;
-    this.belowLeft = null;
-    this.neighbors = [];
-    this.type = "wasteland";
-    this.fire = 0;
-    this.height = 1;
-    this.contains = new Set();
-    this.operations = new Set();
-  }
-
-  printDetails() {
-    console.log(`Tile ${this.y}-${this.x}.
-    Type: ${this.type}.
-    Fire: ${this.fire}.
-    Height: ${this.height}.`);
-  }
-
-  evaluateChange() {
-    //Water flow
-    if (this.type !== "water") {
-      this.neighbors.forEach(tile => {
-        if ((tile.height > this.height || this.height === 0) && tile.type === "water") {
-          this.transform("water");
-        }
-      })
-    }
-
-    // Cleanbots
-    if (this.operations.has("clean")) {
-      this.operations.delete("clean");
-      if (this.type === "wasteland") this.transform("fertile");
-      else if (this.type === "grassland") this.transform("wasteland");
-    }
-    
-    if (this.fire > 0) {
-      this.fire -= 1;
-      gameState.nextChangedTiles.push(this);
-      if (this.fire === 0) {
-        this.type = "ash";
-      }
-    }
-    
-    // if (this.type === "wasteland") {
-    //   this.neighbors.forEach(tile => {
-    //     if (tile) {
-    //       if (tile.type === "water") {
-    //         this.type = "fertile";
-    //         gameState.nextChangedTiles.push(this);
-    //         this.neighbors.forEach(tile => {
-    //           if (tile) {
-    //             gameState.nextChangedTiles.push(tile);
-    //           }
-    //         });
-    //       } 
-    //     };
-    //   });
-    
-    // } else 
-    
-    if (this.type === "fertile") {
-      this.neighbors.forEach(tile => {
-        if (tile) {
-          if (tile.type === "grassland") {
-            this.type = "grassland";
-            gameState.nextChangedTiles.push(this);
-            this.neighbors.forEach(tile => {
-              if (tile) {
-                gameState.nextChangedTiles.push(tile);
-              }
-            });
-          }
-        };
-      });
-
-    } else if (this.type === "grassland") {
-    this.neighbors.forEach(tile => {
-      if (tile) {
-        if (tile.fire > 0 && this.fire === 0) {
-          this.fire = 3;
-          gameState.nextChangedTiles.push(this);
-          this.neighbors.forEach(tile => {
-            if (tile) {
-              gameState.nextChangedTiles.push(tile);
-            }
-          });
-        }
-      }
-    });
-  }
-
-  else if (this.type === "ash") {
-    [this.above, this.right, this.below, this.left].forEach(tile => {
-      if (tile) {
-        if (tile.type === "grassland") {
-          this.type = "grassland";
-          gameState.nextChangedTiles.push(this);
-          [this.above, this.right, this.below, this.left].forEach(tile => {
-            if (tile) {
-              gameState.nextChangedTiles.push(tile);
-            }
-          });
-        }
-      };
-    });
-  }
-
-  }
-
-  updateNeighbors() {
-    this.neighbors.forEach(tile => gameState.nextChangedTiles.push(tile));
-  }
-
-  transform(newType) {
-    switch (newType) {
-      case "wasteland": 
-        if (this.type !== "wasteland") {
-            this.type = newType;
-            gameState.changedTiles.push(this);
-          } 
-        this.updateNeighbors();
-        break;
-      case "water": 
-        if (this.type !== "water") {
-            this.type = newType;
-            gameState.changedTiles.push(this);
-          } 
-        this.updateNeighbors();
-        break;
-      case "grassland":
-        if (this.type === "fertile") {
-          this.type = newType;
-          gameState.changedTiles.push(this);
-        }
-        this.updateNeighbors(); 
-        break;
-      case "fertile":
-        if (this.type === "wasteland") {
-          this.type = newType;
-          gameState.changedTiles.push(this);
-        }
-        this.updateNeighbors(); 
-        break;
-      case "raise":
-        if (this.height < 3) {
-          this.height += 1;
-          gameState.changedTiles.push(this);
-          this.updateNeighbors(); 
-        }
-        break;
-      case "lower":
-        if (this.height > 0) {
-          this.height -= 1;
-          gameState.changedTiles.push(this);
-          this.updateNeighbors(); 
-        }
-        break;
-      case "changed":
-        gameState.nextChangedTiles.push(this);
-      default:
-    }
-  }
-
-  startFire() {
-    if (this.type === "grassland") {
-      this.fire = 3;
-      gameState.changedTiles.push(this);
-      [this.above, this.right, this.below, this.left].forEach(tile => {
-        if (tile) tile.transform("changed");
-      });
-    }
-  }
-}
-
-class Cleanbots {
+class Cleanbot {
   constructor(y,x) {
+    this.type = "cleanbot"
     this.y = y;
     this.x = x;
     this.battery = 7;
@@ -201,7 +20,7 @@ class Cleanbots {
     })
    }
 
-  move() {
+  run() {
     gameState.world[this.y][this.x].contains.delete(this); 
     this.findTargets();
     if (this.battery === 0) {
@@ -210,28 +29,92 @@ class Cleanbots {
     } else if (this.targets.length > 0) {
       let targetIndex = Math.floor(Math.random() * this.targets.length);
       let target = this.targets[targetIndex];
-      if (target.type === "grassland") {
-        this.battery += 3;
-      }
+      // if (target.type === "grassland") {
+      //   this.battery += 3;
+      // }
       this.targets = [];
       this.y = target.y;
       this.x = target.x;
       target.contains.add(this);
       target.operations.add("clean");
-      gameState.changedTiles.push(target);
+      gameState.changedTiles.add(target);
       
     }
     this.battery -= 1;
   }
 }
 
+class Digbot {
+  constructor(y,x, direction="right") {
+    this.y = y;
+    this.x = x;
+    this.battery = 5;
+    this.type = "digbot"
+    this.direction = direction;
+    this.target = null;
+    this.myTile = gameState.world[y][x];
+  }
+
+  canMove() {
+    switch (this.direction) {
+      case "up":
+        if (this.myTile.above) {
+          this.target = this.myTile.above;
+          return true;
+        }
+        return false;
+      case "right":
+        if (this.myTile.right) {
+          this.target = this.myTile.right;
+          return true;
+        } 
+        return false;
+      case "down":
+        if (this.myTile.below) {
+          this.target = this.myTile.below;
+          return true;
+        } 
+        return false;
+      case "left":
+        if (this.myTile.left) {
+          this.target = this.myTile.left;
+          return true;
+        } 
+        return false;
+      default:
+        return false;
+    }
+  }
+
+  run() { 
+    this.myTile.transform("lower");
+    
+    if (this.battery === 0) {
+      this.myTile.contains.delete(this);
+      this.myTile.contains.add("botCorpse");
+      gameState.bots.delete(this);
+    
+    } else if (this.canMove()) {
+      if (this.myTile.contains.has("botCorpse")) {
+        this.battery += 2;
+        this.myTile.contains.delete("botCorpse");
+      }
+      this.myTile.contains.delete(this);
+      this.myTile = this.target;
+      this.y = this.myTile.y;
+      this.x = this.myTile.x;
+      this.myTile.contains.add(this);
+    }
+    this.battery -= 1;
+  }
+}
 
 let gameState = {
   height: 15,
   width: 15,
   world: null,
-  changedTiles: [],
-  nextChangedTiles: [],
+  changedTiles: new Set(),
+  nextChangedTiles: new Set(),
   bots: new Set(),
   activeCommand: null,
   createWorld: () => {
@@ -285,9 +168,11 @@ let gameState = {
     return world;
   },
   drawWorld: () => {
-    ROOT.empty();
+    TILES.empty();
+    BOTS.empty();
     for (let y = 0; y < gameState.world.length; y += 1) {
-      let row = $("<div class='row'></div>")
+      let tileRow = $("<div class='row'></div>")
+      let botRow = $("<div class='row'></div>")
       for (let x = 0; x < gameState.world[y].length; x += 1) {
         let tile = $(`
           <div 
@@ -297,34 +182,65 @@ let gameState = {
             data-height="${gameState.world[y][x].height}"
             data-y="${gameState.world[y][x].y}"
             data-x="${gameState.world[y][x].x}"></div>`);
-            
-            tile.appendTo(row);
+        tile.appendTo(tileRow);
+        
+        let botCell = $(`
+          <div class="botCell"></div>`);
+        let bot = $(`
+          <div
+            class="bot"
+            id="bot-${gameState.world[y][x].y}-${gameState.world[y][x].x}"
+            data-bot="empty"></div>`);
+        botCell.appendTo(botRow);
+        bot.appendTo(botCell);
+        
       }
-      row.appendTo(ROOT);
+      tileRow.appendTo(TILES);
+      botRow.appendTo(BOTS);
     }
   },
   evaluateChangedTiles: () => {
-    gameState.changedTiles.forEach(tile => tile.evaluateChange());
-    gameState.bots.forEach(bot => bot.move());
+    gameState.bots.forEach(bot => {
+      gameState.clearBot(bot);
+      bot.run();
+      gameState.drawBot(bot)
+    });
+    gameState.changedTiles.forEach(tile => {
+      tile.evaluateChange();
+      gameState.drawTile(tile);
+      gameState.changedTiles.delete(tile);
+    });
+    gameState.nextChangedTiles.forEach(tile => gameState.changedTiles.add(tile));
+    gameState.nextChangedTiles.clear();
   },
-  drawChangedTiles: () => {
-    gameState.changedTiles.forEach(tile => gameState.drawTile(tile));
-    gameState.changedTiles = gameState.nextChangedTiles;
-    gameState.nextChangedTiles = [];
-  },
+  // drawChangedTiles: () => {
+  //   //gameState.bots.forEach(bot => gameState.drawBot(bot));
+  //   //gameState.changedTiles.forEach(tile => gameState.drawTile(tile));
+  //   //gameState.changedTiles.clear();
+  //   gameState.nextChangedTiles.forEach(tile => gameState.changedTiles.add(tile));
+  //   gameState.nextChangedTiles.clear();
+  // },
   drawTile: tile => {
     let drawnTile = $(`#${tile.y}-${tile.x}`);
     drawnTile.attr("data-type", tile.type);
     drawnTile.attr("data-fire", tile.fire);
     drawnTile.attr("data-height", tile.height);
   },
+  clearBot: bot => {
+    let drawnBot = $(`#bot-${bot.y}-${bot.x}`)
+    drawnBot.attr("data-bot", "empty");
+  },
+  drawBot: bot => {
+    let drawnBot = $(`#bot-${bot.y}-${bot.x}`)
+    drawnBot.attr("data-bot", bot.type);
+  },
   cycle: () => {
     gameState.evaluateChangedTiles();
-    gameState.drawChangedTiles();
+    //gameState.drawChangedTiles();
   },
 }
 
-ROOT.on("click", $(".tile"), () => {
+TILES.on("click", $(".tile"), () => {
   let tile = gameState.world[event.target.dataset.y][event.target.dataset.x]
   switch (gameState.activeCommand) {
     case "show-details":
@@ -345,13 +261,20 @@ ROOT.on("click", $(".tile"), () => {
     case "make-fire":
       tile.startFire();
       break;
-    case "add-cleanbot":
-      let newBot = new Cleanbots(tile.y, tile.x);
+    case "add-cleanbot": {
+      let newBot = new Cleanbot(tile.y, tile.x);
       tile.contains.add(newBot);
       tile.operations.add("clean");
       gameState.bots.add(newBot);
-      gameState.changedTiles.push(tile);
-      break;
+      gameState.changedTiles.add(tile);
+      break; }
+    case "add-digbot": {
+      let newBot = new Digbot(tile.y, tile.x);
+      tile.contains.add(newBot);
+      tile.transform("lower");
+      gameState.bots.add(newBot);
+      gameState.changedTiles.add(tile);
+      break; }
     default:
       console.log("No command selected."); 
   }
@@ -377,6 +300,10 @@ PALETTE.on("click", "div", () => {
       $(event.target).toggleClass("palette-active");
       gameState.activeCommand = "add-cleanbot";
       break;
+      case "add-digbot":
+        $(event.target).toggleClass("palette-active");
+        gameState.activeCommand = "add-digbot";
+        break;
     case "raise":
       $(event.target).toggleClass("palette-active");
       gameState.activeCommand = "raise";

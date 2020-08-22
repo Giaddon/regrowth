@@ -47,6 +47,9 @@
 .add-cleanbot {
   background-color: indigo;
 }
+.add-digbot {
+  background-color: palegreen;
+}
 .raise {
   background-color: violet;
 }
@@ -61,11 +64,45 @@
   height: 20px;
 }
 
+.bots .row {
+  
+}
+
+.bots {
+  position: absolute;
+  top: 65px;
+  left: 5px;
+  z-index: 10;
+  pointer-events: none;
+}
+.botCell {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.bot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 5px;
+  height: 5px;
+}
+
+.bot[data-bot="empty"] {
+  background-color: none;
+}
+.bot[data-bot="cleanbot"] {
+  background-color: indigo;
+}
+.bot[data-bot="digbot"] {
+  background-color: palegreen;
+}
 .tile {
   display: inline-block;
   width: 20px;
   height: 20px;
-  /* outline: 1px solid #fff; */
 }
 
 
