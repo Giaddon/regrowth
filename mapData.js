@@ -1,0 +1,271 @@
+const MAP1 = 
+[
+  [
+    new Tile({y:0, x:0}),
+    new Tile({y:0, x:1}),
+    new Tile({y:0, x:2}),
+    new Tile({y:0, x:3, height: 3, type: "rock"}),
+    new Tile({y:0, x:4, height: 3, type: "rock"}),
+    new Tile({y:0, x:5, height: 3, type: "rock"}),
+    new Tile({y:0, x:6, height: 3, type: "rock"}),
+    new Tile({y:0, x:7}),
+    new Tile({y:0, x:8}),
+    new Tile({y:0, x:9})
+  ],
+  [
+    new Tile({y:1, x:0}),
+    new Tile({y:1, x:1}),
+    new Tile({y:1, x:2}),
+    new Tile({y:1, x:3, height: 3, type: "rock"}),
+    new Tile({y:1, x:4, height: 2, type: "rock"}),
+    new Tile({y:1, x:5, height: 2, type: "rock"}),
+    new Tile({y:1, x:6, height: 3, type: "rock"}),
+    new Tile({y:1, x:7}),
+    new Tile({y:1, x:8}),
+    new Tile({y:1, x:9})
+  ],
+  [
+    new Tile({y:2, x:0}),
+    new Tile({y:2, x:1}),
+    new Tile({y:2, x:2}),
+    new Tile({y:2, x:3, height: 2, type: "rock"}),
+    new Tile({y:2, x:4}),
+    new Tile({y:2, x:5}),
+    new Tile({y:2, x:6, height: 2, type: "rock"}),
+    new Tile({y:2, x:7}),
+    new Tile({y:2, x:8}),
+    new Tile({y:2, x:9})
+  ],[
+    new Tile({y:3, x:0}),
+    new Tile({y:3, x:1}),
+    new Tile({y:3, x:2}),
+    new Tile({y:3, x:3}),
+    new Tile({y:3, x:4, height: 0}),
+    new Tile({y:3, x:5}),
+    new Tile({y:3, x:6}),
+    new Tile({y:3, x:7}),
+    new Tile({y:3, x:8}),
+    new Tile({y:3, x:9})
+  ],[
+    new Tile({y:4, x:0}),
+    new Tile({y:4, x:1}),
+    new Tile({y:4, x:2}),
+    new Tile({y:4, x:3}),
+    new Tile({y:4, x:4, height: 0}),
+    new Tile({y:4, x:5}),
+    new Tile({y:4, x:6}),
+    new Tile({y:4, x:7}),
+    new Tile({y:4, x:8}),
+    new Tile({y:4, x:9})
+  ],[
+    new Tile({y:5, x:0}),
+    new Tile({y:5, x:1}),
+    new Tile({y:5, x:2}),
+    new Tile({y:5, x:3}),
+    new Tile({y:5, x:4, height: 0}),
+    new Tile({y:5, x:5, height: 0}),
+    new Tile({y:5, x:6}),
+    new Tile({y:5, x:7}),
+    new Tile({y:5, x:8}),
+    new Tile({y:5, x:9})
+  ],[
+    new Tile({y:6,x :0}),
+    new Tile({y:6,x :1}),
+    new Tile({y:6,x :2}),
+    new Tile({y:6,x :3}),
+    new Tile({y:6,x :4, height: 0}),
+    new Tile({y:6,x :5, height: 0}),
+    new Tile({y:6,x :6, height: 0}),
+    new Tile({y:6,x :7, height: 0}),
+    new Tile({y:6,x :8}),
+    new Tile({y:6,x :9})
+  ],[
+    new Tile({y:7, x:0}),
+    new Tile({y:7, x:1}),
+    new Tile({y:7, x:2}),
+    new Tile({y:7, x:3}),
+    new Tile({y:7, x:4, height: 0}),
+    new Tile({y:7, x:5, height: 0}),
+    new Tile({y:7, x:6}),
+    new Tile({y:7, x:7}),
+    new Tile({y:7, x:8}),
+    new Tile({y:7, x:9})
+  ],[
+    new Tile({y:8, x:0}),
+    new Tile({y:8, x:1}),
+    new Tile({y:8, x:2}),
+    new Tile({y:8, x:3, height: 0}),
+    new Tile({y:8, x:4, height: 0}),
+    new Tile({y:8, x:5}),
+    new Tile({y:8, x:6}),
+    new Tile({y:8, x:7}),
+    new Tile({y:8, x:8}),
+    new Tile({y:8, x:9})
+  ],
+  [
+    new Tile({y:9, x:0}),
+    new Tile({y:9, x:1}),
+    new Tile({y:9, x:2}),
+    new Tile({y:9, x:3, height: 1}),
+    new Tile({y:9, x:4}),
+    new Tile({y:9, x:5}),
+    new Tile({y:9, x:6}),
+    new Tile({y:9, x:7}),
+    new Tile({y:9, x:8}),
+    new Tile({y:9, x:9})
+  ],
+  [
+    new Tile({y:10, x:0}),
+    new Tile({y:10, x:1}),
+    new Tile({y:10, x:2}),
+    new Tile({y:10, x:3, height: 1}),
+    new Tile({y:10, x:4}),
+    new Tile({y:10, x:5}),
+    new Tile({y:10, x:6}),
+    new Tile({y:10, x:7}),
+    new Tile({y:10, x:8}),
+    new Tile({y:10, x:9})
+  ],
+  [
+    new Tile({y:11, x:0}),
+    new Tile({y:11, x:1}),
+    new Tile({y:11, x:2}),
+    new Tile({y:11, x:3, height: 0}),
+    new Tile({y:11, x:4}),
+    new Tile({y:11, x:5}),
+    new Tile({y:11, x:6}),
+    new Tile({y:11, x:7}),
+    new Tile({y:11, x:8}),
+    new Tile({y:11, x:9})
+  ],
+  [
+    new Tile({y:12, x:0}),
+    new Tile({y:12, x:1}),
+    new Tile({y:12, x:2}),
+    new Tile({y:12, x:3, type: "grassland"}),
+    new Tile({y:12, x:4}),
+    new Tile({y:12, x:5}),
+    new Tile({y:12, x:6}),
+    new Tile({y:12, x:7}),
+    new Tile({y:12, x:8}),
+    new Tile({y:12, x:9})
+  ],
+];
+
+const MAPTEMPLATE = 
+[
+  [
+    new Tile({y:0, x:0}),
+    new Tile({y:0, x:1}),
+    new Tile({y:0, x:2}),
+    new Tile({y:0, x:3}),
+    new Tile({y:0, x:4}),
+    new Tile({y:0, x:5}),
+    new Tile({y:0, x:6}),
+    new Tile({y:0, x:7}),
+    new Tile({y:0, x:8}),
+    new Tile({y:0, x:9})
+  ],
+  [
+    new Tile({y:1, x:0}),
+    new Tile({y:1, x:1}),
+    new Tile({y:1, x:2}),
+    new Tile({y:1, x:3}),
+    new Tile({y:1, x:4}),
+    new Tile({y:1, x:5}),
+    new Tile({y:1, x:6}),
+    new Tile({y:1, x:7}),
+    new Tile({y:1, x:8}),
+    new Tile({y:1, x:9})
+  ],
+  [
+    new Tile({y:2, x:0}),
+    new Tile({y:2, x:1}),
+    new Tile({y:2, x:2}),
+    new Tile({y:2, x:3}),
+    new Tile({y:2, x:4}),
+    new Tile({y:2, x:5}),
+    new Tile({y:2, x:6}),
+    new Tile({y:2, x:7}),
+    new Tile({y:2, x:8}),
+    new Tile({y:2, x:9})
+  ],[
+    new Tile({y:3, x:0}),
+    new Tile({y:3, x:1}),
+    new Tile({y:3, x:2}),
+    new Tile({y:3, x:3}),
+    new Tile({y:3, x:4}),
+    new Tile({y:3, x:5}),
+    new Tile({y:3, x:6}),
+    new Tile({y:3, x:7}),
+    new Tile({y:3, x:8}),
+    new Tile({y:3, x:9})
+  ],[
+    new Tile({y:4, x:0}),
+    new Tile({y:4, x:1}),
+    new Tile({y:4, x:2}),
+    new Tile({y:4, x:3}),
+    new Tile({y:4, x:4}),
+    new Tile({y:4, x:5}),
+    new Tile({y:4, x:6}),
+    new Tile({y:4, x:7}),
+    new Tile({y:4, x:8}),
+    new Tile({y:4, x:9})
+  ],[
+    new Tile({y:5, x:0}),
+    new Tile({y:5, x:1}),
+    new Tile({y:5, x:2}),
+    new Tile({y:5, x:3}),
+    new Tile({y:5, x:4}),
+    new Tile({y:5, x:5}),
+    new Tile({y:5, x:6}),
+    new Tile({y:5, x:7}),
+    new Tile({y:5, x:8}),
+    new Tile({y:5, x:9})
+  ],[
+    new Tile({y:6,x :0}),
+    new Tile({y:6,x :1}),
+    new Tile({y:6,x :2}),
+    new Tile({y:6,x :3}),
+    new Tile({y:6,x :4}),
+    new Tile({y:6,x :5}),
+    new Tile({y:6,x :6}),
+    new Tile({y:6,x :7}),
+    new Tile({y:6,x :8}),
+    new Tile({y:6,x :9})
+  ],[
+    new Tile({y:7, x:0}),
+    new Tile({y:7, x:1}),
+    new Tile({y:7, x:2}),
+    new Tile({y:7, x:3}),
+    new Tile({y:7, x:4}),
+    new Tile({y:7, x:5}),
+    new Tile({y:7, x:6}),
+    new Tile({y:7, x:7}),
+    new Tile({y:7, x:8}),
+    new Tile({y:7, x:9})
+  ],[
+    new Tile({y:8, x:0}),
+    new Tile({y:8, x:1}),
+    new Tile({y:8, x:2}),
+    new Tile({y:8, x:3}),
+    new Tile({y:8, x:4}),
+    new Tile({y:8, x:5}),
+    new Tile({y:8, x:6}),
+    new Tile({y:8, x:7}),
+    new Tile({y:8, x:8}),
+    new Tile({y:8, x:9})
+  ],
+  [
+    new Tile({y:9, x:0}),
+    new Tile({y:9, x:1}),
+    new Tile({y:9, x:2}),
+    new Tile({y:9, x:3}),
+    new Tile({y:9, x:4}),
+    new Tile({y:9, x:5}),
+    new Tile({y:9, x:6}),
+    new Tile({y:9, x:7}),
+    new Tile({y:9, x:8}),
+    new Tile({y:9, x:9})
+  ],
+];

@@ -99,6 +99,9 @@
 .bot[data-bot="digbot"] {
   background-color: palegreen;
 }
+.bot[data-bot="pumpbot"] {
+  background-color: tomato;
+}
 .tile {
   display: inline-block;
   width: 20px;
@@ -118,8 +121,11 @@
 .tile[data-height='3'] {
   opacity: 1.0;
 }
-.tile[data-type='wasteland'] {
+.tile[data-type='rock'] {
   background-color: black;
+}
+.tile[data-type='wasteland'] {
+  background-color: darkslategrey;
 }
 .tile[data-type='fertile'] {
   background-color:brown;

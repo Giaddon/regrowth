@@ -1,5 +1,5 @@
 class Tile {
-  constructor(x, y){
+  constructor({y, x, type = "wasteland", height = 1 }){
     this.x = x;
     this.y = y;
     this.above = null;
@@ -11,9 +11,9 @@ class Tile {
     this.belowRight = null;
     this.belowLeft = null;
     this.neighbors = [];
-    this.type = "wasteland";
+    this.type = type;
     this.fire = 0;
-    this.height = 1;
+    this.height = height;
     this.contains = new Set();
     this.operations = new Set();
   }
@@ -24,6 +24,14 @@ class Tile {
     Fire: ${this.fire}.
     Height: ${this.height}.
     Contains: ${this.contains.forEach(thing => thing)}.`);
+  }
+
+  add(thing) {
+    this.contains.add(thing);
+  }
+
+  remove(thing) {
+    this.contains.delete(thing);
   }
 
   evaluateChange() {
@@ -51,6 +59,10 @@ class Tile {
       }
     }
     
+    if (this.type === "rock") {
+      // rock stuff
+    } 
+
     if (this.type === "wasteland") {
       this.neighbors.forEach(tile => {
         if (tile.type === "water") {
@@ -132,7 +144,7 @@ class Tile {
         this.updateNeighbors();
         break;
       case "grassland":
-        if (this.type === "fertile") {
+        if (this.type === "fertile" && this.neighbors.some((tile => tile.type === "water"))) {
           this.type = newType;
           gameState.changedTiles.add(this);
         }
