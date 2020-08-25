@@ -16,6 +16,7 @@ class Tile {
     this.height = height;
     this.contains = new Set();
     this.operations = new Set();
+    this.world = null;
   }
 
   printDetails() {
@@ -27,8 +28,7 @@ class Tile {
       }
     }
     
-    
-    gameState.updateLog(`Tile ${this.y}-${this.x}.
+    this.world.updateLog(`Tile ${this.y}-${this.x}.
     <br>Type: ${this.type}.
     <br>Fire: ${this.fire}.
     <br>Height: ${this.height}.
@@ -62,7 +62,7 @@ class Tile {
     
     if (this.fire > 0) {
       this.fire -= 1;
-      gameState.nextChangedTiles.add(this);
+      this.world.addToQueue(this);
       if (this.fire === 0) {
         this.type = "ash";
       }
@@ -93,41 +93,22 @@ class Tile {
       });
 
     } else if (this.type === "grassland") {
-    this.neighbors.forEach(tile => {
-      if (tile) {
+      this.neighbors.forEach(tile => {
         if (tile.fire > 0 && this.fire === 0) {
           this.fire = 3;
-          gameState.nextChangedTiles.add(this);
-          this.neighbors.forEach(tile => {
-            if (tile) {
-              gameState.nextChangedTiles.add(tile);
-            }
-          });
+          this.world.addToNextQueue(this);
+          this.updateNeighbors();
         }
-      }
-    });
-  }
-
-  else if (this.type === "ash") {
-    [this.above, this.right, this.below, this.left].forEach(tile => {
-      if (tile) {
-        if (tile.type === "grassland") {
-          this.type = "grassland";
-          gameState.nextChangedTiles.add(this);
-          [this.above, this.right, this.below, this.left].forEach(tile => {
-            if (tile) {
-              gameState.nextChangedTiles.add(tile);
-            }
-          });
-        }
-      };
-    });
-  }
-
+      });
+    }
   }
 
   updateNeighbors() {
-    this.neighbors.forEach(tile => gameState.nextChangedTiles.add(tile));
+    this.neighbors.forEach(tile => this.world.addToNextQueue(tile));
+  }
+
+  updateMe() {
+    this.world.addToQueue(this);
   }
 
   transform(newType) {
@@ -135,47 +116,47 @@ class Tile {
       case "wasteland": 
         if (this.type !== "wasteland") {
             this.type = newType;
-            gameState.changedTiles.add(this);
+            this.updateMe();
           } 
         this.updateNeighbors();
         break;
       case "water": 
         if (this.type !== "water") {
             this.type = newType;
-            gameState.changedTiles.add(this);
+            this.updateMe();
           } 
         this.updateNeighbors();
         break;
       case "grassland":
         if (this.type === "fertile" && this.neighbors.some((tile => tile.type === "water"))) {
           this.type = newType;
-          gameState.changedTiles.add(this);
+          this.updateMe();
         }
         this.updateNeighbors(); 
         break;
       case "fertile":
         if (this.type === "wasteland") {
           this.type = newType;
-          gameState.changedTiles.add(this);
+          this.updateMe();
         }
         this.updateNeighbors(); 
         break;
       case "raise":
         if (this.height < 3) {
           this.height += 1;
-          gameState.changedTiles.add(this);
+          this.updateMe();
           this.updateNeighbors(); 
         }
         break;
       case "lower":
         if (this.height > 0) {
           this.height -= 1;
-          gameState.changedTiles.add(this);
+          this.updateMe();
           this.updateNeighbors(); 
         }
         break;
-      case "changed":
-        gameState.nextChangedTiles.add(this);
+      // case "changed":
+      //   gameState.nextChangedTiles.add(this);
       default:
     }
   }
@@ -183,7 +164,7 @@ class Tile {
   startFire() {
     if (this.type === "grassland") {
       this.fire = 3;
-      gameState.changedTiles.add(this);
+      this.updateMe();
       [this.above, this.right, this.below, this.left].forEach(tile => {
         if (tile) tile.transform("changed");
       });

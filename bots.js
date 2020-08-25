@@ -1,27 +1,28 @@
 class Bot {
-  constructor(y, x, battery = 1) {
+  constructor({y, x, battery = 1, world}) {
     this.y = y;
     this.x = x;
     this.battery = battery
-    this.myTile = gameState.getTile(y, x);
+    this.world = world;
+    this.myTile = world.getTile(y, x);
   }
 
   startUp() {
-    gameState.addBot(this);
+    this.world.addBot(this);
     this.myTile.add(this);
   }
 
   shutDown() {
     this.myTile.add("botCorpse");
     this.myTile.remove(this);
-    gameState.removeBot(this);
+    this.world.removeBot(this);
   }
 
 }
 
 class Pumpbot extends Bot {
-  constructor(y, x) {
-    super(y, x);
+  constructor({y, x, world}) {
+    super({y, x, world});
     this.type = "pumpbot";
   }
 
@@ -32,8 +33,8 @@ class Pumpbot extends Bot {
 }
 
 class Cleanbot extends Bot {
-  constructor(y, x) {
-    super(y, x, 7)
+  constructor({y, x, world}) {
+    super({y, x, world, battery:7})
     this.type = "cleanbot"
     this.targets = [];
     this.validTargets = new Set(["wasteland", "grassland"]);
@@ -63,15 +64,15 @@ class Cleanbot extends Bot {
       this.x = this.myTile.x;
       this.myTile.add(this);
       this.myTile.operations.add("clean");
-      gameState.changedTiles.add(this.myTile);  
+      this.world.addToQueue(this.myTile);  
     }
     this.battery -= 1;
   }
 }
 
 class Digbot extends Bot {
-  constructor(y, x, direction="down") {
-    super(y, x, 2)
+  constructor({y, x, world, direction="down"}) {
+    super({y, x, world, battery:2})
     this.type = "digbot"
     this.direction = direction;
     this.target = null;

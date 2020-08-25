@@ -2,15 +2,16 @@ const TILES = $("#tiles");
 const BOTS = $("#bots");
 const PALETTE = $("#palette");
 const LOG = $("#log");
+let gameWorld;
 
 function start() {
   setupMouseControls();
-  
-  gameState.world = gameState.createWorld();
-  gameState.drawWorld();
+
+  gameWorld = new World({mapData: MAP2});
+  gameWorld.drawWorld();
 
   setInterval(() => {
-    gameState.cycle();
+    gameWorld.cycle();
   }, 400);
 }
 

@@ -1,12 +1,12 @@
 function setupMouseControls() {
   TILES.on("click", $(".tile"), (event) => {
-    let tile = gameState.getTile(event.target.dataset.y, event.target.dataset.x);
-    switch (gameState.activeCommand) {
+    let tile = gameWorld.getTile(event.target.dataset.y, event.target.dataset.x);
+    switch (gameWorld.activeCommand) {
       case "show-details":
         tile.printDetails();
         break;
       case "make-water":
-        let newBot = new Pumpbot(event.target.dataset.y, event.target.dataset.x);
+        let newBot = new Pumpbot({y:event.target.dataset.y, x:event.target.dataset.x, world:gameWorld});
         newBot.startUp();
         break;
       case "make-grass":
@@ -22,11 +22,10 @@ function setupMouseControls() {
         tile.startFire();
         break;
       case "add-cleanbot": {
-        let newBot = new Cleanbot(tile.y, tile.x);
-        tile.contains.add(newBot);
+        let newBot = new Cleanbot({y: tile.y, x: tile.x, world: gameWorld});
+        newBot.startUp();
         tile.operations.add("clean");
-        gameState.bots.add(newBot);
-        gameState.changedTiles.add(tile);
+        gameWorld.addToQueue(tile);
         break; }
       default:
         console.log("No command selected."); 
@@ -35,7 +34,7 @@ function setupMouseControls() {
 
   //draggables
   TILES.on("mousedown", $(".tile"), () => {
-    $(this).data("commandData", {x: event.pageX, y: event.pageY, tile: gameState.getTile(event.target.dataset.y, event.target.dataset.x)});
+    $(this).data("commandData", {x: event.pageX, y: event.pageY, tile: gameWorld.getTile(event.target.dataset.y, event.target.dataset.x)});
   }).on("mouseup", () => {
     let point0 = {x: $(this).data('commandData').x, y: $(this).data('commandData').y};
     let tile = $(this).data('commandData').tile;
@@ -47,9 +46,9 @@ function setupMouseControls() {
     } else {
       direction = matrix[1] > 0 ? "down" : "up";
     }
-    switch (gameState.activeCommand) {
+    switch (gameWorld.activeCommand) {
       case "add-digbot": {
-        let newBot = new Digbot(tile.y, tile.x, direction);
+        let newBot = new Digbot({y:tile.y, x:tile.x, world:gameWorld, direction});
         newBot.startUp();
         break; }
       default:
@@ -62,36 +61,36 @@ function setupMouseControls() {
     $(".palette-active").toggleClass("palette-active");
     switch (event.target.id) {
       case "make-water":
-        gameState.activeCommand = "make-water";
+        gameWorld.activeCommand = "make-water";
         $(event.target).toggleClass("palette-active");
         break;
       case "make-grass":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "make-grass";
+        gameWorld.activeCommand = "make-grass";
         break;
       case "make-fire":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "make-fire";
+        gameWorld.activeCommand = "make-fire";
         break;
       case "add-cleanbot":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "add-cleanbot";
+        gameWorld.activeCommand = "add-cleanbot";
         break;
         case "add-digbot":
           $(event.target).toggleClass("palette-active");
-          gameState.activeCommand = "add-digbot";
+          gameWorld.activeCommand = "add-digbot";
           break;
       case "raise":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "raise";
+        gameWorld.activeCommand = "raise";
         break;
       case "lower":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "lower";
+        gameWorld.activeCommand = "lower";
         break;
       case "show-details":
         $(event.target).toggleClass("palette-active");
-        gameState.activeCommand = "show-details";
+        gameWorld.activeCommand = "show-details";
         break;
       default:
         console.log("Command not recognized.");
