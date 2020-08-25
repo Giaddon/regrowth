@@ -1,11 +1,16 @@
 let gameState = {
-  height: 13,
-  width: 10,
+  height: 30,
+  width: 20,
   world: null,
   changedTiles: new Set(),
   nextChangedTiles: new Set(),
   bots: new Set(),
   activeCommand: null,
+  log: "",
+  updateLog: (entry) => {
+    let newEntry = $(`<p>${entry}</p>`);
+    newEntry.prependTo(LOG);
+  },
   getTile: (y,x) => {
     return gameState.world[y][x];
   },

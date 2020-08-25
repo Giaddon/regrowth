@@ -165,3 +165,19 @@
   position: relative;
   outline: 2px dashed gold;
 }
+
+.log {
+  position: absolute;
+  height: 500px;
+  overflow-y: scroll;
+  width: 400px;
+  top: 65px;
+  right: 0px;
+  background-color: darkslategrey;
+  color: greenyellow;
+  padding: 20px;
+}
+
+.log p {
+  margin-bottom: 10px;
+}

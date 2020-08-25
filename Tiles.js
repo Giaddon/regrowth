@@ -19,11 +19,20 @@ class Tile {
   }
 
   printDetails() {
-    console.log(`Tile ${this.y}-${this.x}.
-    Type: ${this.type}.
-    Fire: ${this.fire}.
-    Height: ${this.height}.
-    Contains: ${this.contains.forEach(thing => thing)}.`);
+    let contains = "Nothing."
+    if (this.contains.size > 0) {
+      contains = "";
+      for (let thing of this.contains.values()) {
+        contains += thing + " ";
+      }
+    }
+    
+    
+    gameState.updateLog(`Tile ${this.y}-${this.x}.
+    <br>Type: ${this.type}.
+    <br>Fire: ${this.fire}.
+    <br>Height: ${this.height}.
+    <br>Contains: ${contains}`);
   }
 
   add(thing) {
@@ -77,14 +86,8 @@ class Tile {
     if (this.type === "fertile") {
       this.neighbors.forEach(tile => {
         if (tile) {
-          if (tile.type === "grassland") {
-            this.type = "grassland";
-            gameState.nextChangedTiles.add(this);
-            this.neighbors.forEach(tile => {
-              if (tile) {
-                gameState.nextChangedTiles.add(tile);
-              }
-            });
+          if (tile.type === "grassland" && this.neighbors.some(tile => tile.type==="water")) {
+            this.transform("grassland");
           }
         };
       });

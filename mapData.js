@@ -130,7 +130,7 @@ const MAP1 =
     new Tile({y:11, x:0}),
     new Tile({y:11, x:1}),
     new Tile({y:11, x:2}),
-    new Tile({y:11, x:3, height: 0}),
+    new Tile({y:11, x:3}),
     new Tile({y:11, x:4}),
     new Tile({y:11, x:5}),
     new Tile({y:11, x:6}),
@@ -142,13 +142,25 @@ const MAP1 =
     new Tile({y:12, x:0}),
     new Tile({y:12, x:1}),
     new Tile({y:12, x:2}),
-    new Tile({y:12, x:3, type: "grassland"}),
+    new Tile({y:12, x:3, height: 0}),
     new Tile({y:12, x:4}),
     new Tile({y:12, x:5}),
     new Tile({y:12, x:6}),
     new Tile({y:12, x:7}),
     new Tile({y:12, x:8}),
     new Tile({y:12, x:9})
+  ],
+  [
+    new Tile({y:13, x:0}),
+    new Tile({y:13, x:1}),
+    new Tile({y:13, x:2}),
+    new Tile({y:13, x:3, type: "grassland"}),
+    new Tile({y:13, x:4}),
+    new Tile({y:13, x:5}),
+    new Tile({y:13, x:6}),
+    new Tile({y:13, x:7}),
+    new Tile({y:13, x:8}),
+    new Tile({y:13, x:9})
   ],
 ];
 
