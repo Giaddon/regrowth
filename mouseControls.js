@@ -10,7 +10,9 @@ function setupMouseControls() {
         newBot.startUp();
         break;
       case "make-grass":
-        tile.transform("grassland");
+        let newPlant = new Grass({y: tile.y, x: tile.x, world: gameWorld});
+        newPlant.sprout();
+        //gameWorld.addToQueue(tile);
         break;
       case "raise":
         tile.transform("raise");

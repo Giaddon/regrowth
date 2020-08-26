@@ -17,6 +17,7 @@ class Tile {
     this.contains = new Set();
     this.operations = new Set();
     this.world = null;
+    this.plant = null;
   }
 
   printDetails() {
@@ -32,11 +33,22 @@ class Tile {
     <br>Type: ${this.type}.
     <br>Fire: ${this.fire}.
     <br>Height: ${this.height}.
+    <br>Plant: ${this.plant ? this.plant.type : "None"}.
     <br>Contains: ${contains}`);
   }
 
   add(thing) {
     this.contains.add(thing);
+  }
+
+  grow(plant) {
+    this.plant = plant;
+    this.updateMeNext();
+    this.updateNeighbors();
+  }
+
+  wither() {
+    this.plant = null;
   }
 
   remove(thing) {
@@ -72,16 +84,26 @@ class Tile {
       // rock stuff
     } 
 
-    if (this.type === "wasteland") {
-      this.neighbors.forEach(tile => {
-        if (tile.type === "water") {
-          this.transform("fertile");
-          this.updateNeighbors();
-        } 
-      });
-    }
+    // if (this.type === "wasteland") {
+    //   this.neighbors.forEach(tile => {
+    //     if (tile.type === "water") {
+    //       this.transform("fertile");
+    //       this.updateNeighbors();
+    //     } 
+    //   });
+    // }
     
-    // } else 
+    if (this.type === "dirt" && !this.plant) {
+      this.neighbors.forEach(tile => {
+        if (tile.plant) {
+          if (tile.plant.type === "grass") {
+            let newPlant = new Grass({y: this.y, x: this.x, world: this.world})
+            newPlant.sprout();
+          }
+
+        }
+      });
+    } else 
     
     if (this.type === "fertile") {
       this.neighbors.forEach(tile => {
@@ -109,6 +131,10 @@ class Tile {
 
   updateMe() {
     this.world.addToQueue(this);
+  }
+
+  updateMeNext() {
+    this.world.addToNextQueue(this);
   }
 
   transform(newType) {

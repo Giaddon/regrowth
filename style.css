@@ -68,20 +68,20 @@
   
 }
 
-.bots {
+.bots, .plants {
   position: absolute;
   top: 65px;
   left: 5px;
   z-index: 10;
   pointer-events: none;
 }
-.botCell {
+.botCell, .plantCell {
   position: relative;
   display: inline-block;
   width: 20px;
   height: 20px;
 }
-.bot {
+.bot, .plant {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -89,6 +89,18 @@
   width: 5px;
   height: 5px;
 }
+
+
+.plant[data-plant="empty"] {
+  background-color: none;
+}
+.plant[data-plant="dead"] {
+  background-color: brown;
+}
+.plant[data-plant="grass"] {
+  background-color: green;
+}
+
 
 .bot[data-bot="empty"] {
   background-color: none;
@@ -126,6 +138,9 @@
 }
 .tile[data-type='wasteland'] {
   background-color: darkslategrey;
+}
+.tile[data-type='dirt'] {
+  background-color: chocolate;
 }
 .tile[data-type='fertile'] {
   background-color:brown;

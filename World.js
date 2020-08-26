@@ -6,6 +6,7 @@ class World {
     this.changedTiles = new Set();
     this.nextChangedTiles = new Set();
     this.bots = new Set();
+    this.plants = new Set();
     this.activeCommand = null;
     this.log = "";
   }
@@ -80,6 +81,14 @@ class World {
     this.bots.add(bot);
   }
 
+  addPlant(plant) {
+    this.plants.add(plant);
+  }
+
+  removePlant(plant) {
+    this.plants.delete(plant);
+  }
+
   removeBot(bot) {
     this.bots.delete(bot);
   }
@@ -92,11 +101,13 @@ class World {
   }
 
   drawWorld() {
-    TILES.empty();
     BOTS.empty();
+    PLANTS.empty();
+    TILES.empty();
     for (let y = 0; y < this.height; y += 1) {
-      let tileRow = $("<div class='row'></div>")
-      let botRow = $("<div class='row'></div>")
+      let tileRow = $("<div class='row'></div>");
+      let botRow = $("<div class='row'></div>");
+      let plantRow = $("<div class='row'></div>");
       for (let x = 0; x < this.width; x += 1) {
         let tile = $(`
           <div 
@@ -118,9 +129,21 @@ class World {
         botCell.appendTo(botRow);
         bot.appendTo(botCell);
         
+        let plantCell = $(`
+        <div class="plantCell"></div>`);
+      let plant = $(`
+        <div
+          class="plant"
+          id="plant-${this.map[y][x].y}-${this.map[y][x].x}"
+          data-plant="empty"></div>`);
+      plantCell.appendTo(plantRow);
+      plant.appendTo(plantCell);
+
+
       }
-      tileRow.appendTo(TILES);
       botRow.appendTo(BOTS);
+      plantRow.appendTo(PLANTS);
+      tileRow.appendTo(TILES);
     }
   }
 
@@ -133,8 +156,16 @@ class World {
     this.changedTiles.forEach(tile => {
       tile.evaluateChange();
       this.drawTile(tile);
+      if (tile.plant) {
+        this.drawPlant(tile.plant);
+        tile.plant.live();
+      } 
       this.changedTiles.delete(tile);
     });
+    // this.plants.forEach(plant => {
+    //   plant.live();
+    //   this.drawPlant(plant);
+    // })
     this.nextChangedTiles.forEach(tile => this.changedTiles.add(tile));
     this.nextChangedTiles.clear();
   }
@@ -154,6 +185,16 @@ class World {
   drawBot(bot) {
     let drawnBot = $(`#bot-${bot.y}-${bot.x}`)
     drawnBot.attr("data-bot", bot.type);
+  }
+
+  drawPlant(plant) {
+    let plantCell = $(`#plant-${plant.y}-${plant.x}`)
+    plantCell.attr("data-plant", plant.type);
+  }
+
+  clearPlant(plant) {
+    let drawnPlant = $(`#plant-${plant.y}-${plant.x}`)
+    drawnPlant.attr("data-plant", "dead");
   }
   
   cycle() {
@@ -177,6 +218,10 @@ class World {
  * Rock / Stone
  * 
  * Plants have different requierments (tile type, water, etc)
+ * 
+ * Create the conditions for life -> introduce life -> life makes changes (how?) -> repeat
+ * 
+ * 
  * 
  * 
  * 

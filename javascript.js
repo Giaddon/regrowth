@@ -1,5 +1,6 @@
 const TILES = $("#tiles");
 const BOTS = $("#bots");
+const PLANTS = $("#plants");
 const PALETTE = $("#palette");
 const LOG = $("#log");
 let gameWorld;
