@@ -8,7 +8,7 @@ let gameWorld;
 function start() {
   setupMouseControls();
 
-  gameWorld = new World({mapData: MAP2});
+  gameWorld = new World({mapData:MAP2});
   gameWorld.drawWorld();
 
   setInterval(() => {

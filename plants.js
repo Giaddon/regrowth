@@ -34,3 +34,5 @@ class Grass extends Plant{
   }
 
 }
+
+/** Grass, shrubs, trees? */
